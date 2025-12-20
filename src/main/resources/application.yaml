@@ -1,0 +1,39 @@
+spring:
+  profiles:
+    active: trace
+
+  servlet:
+    multipart:
+      max-file-size: 10MB      # ?? ?? ?? ??
+      max-request-size: 200MB   # ?? ?? ?? (?? ?? ??)
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/Ecommerce?useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        generate_statistics: false
+    show-sql: false
+    defer-datasource-initialization: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+
+jwt:
+  issuer: "socialNetworkService"
+  key:
+    access-key: "GxNfK0XvN7pM3jB2YqRtZl4s8dF1vC9qTzE5aWm2sUuLxOeH"
+    refresh-key: "JrW4pD7aZsQ8xR1mTgB2yV5fNnL9kC3vEoH6qUuP0wYtSxMz"
+  ttl:
+    access: 30 #min
+    refresh: 7 # days
