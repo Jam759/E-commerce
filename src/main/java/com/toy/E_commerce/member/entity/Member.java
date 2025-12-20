@@ -36,6 +36,5 @@ public class Member extends LongIdSoftDeleteEntity {
     private String profileImgPath;
 
     @OneToOne(mappedBy = "member")
-    @JoinColumn(name = "local_login_info_id")
     private LocalLoginInfo loginInfo;
 }

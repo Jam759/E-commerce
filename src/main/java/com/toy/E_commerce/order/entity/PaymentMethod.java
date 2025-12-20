@@ -1,4 +1,4 @@
-package com.toy.E_commerce.member.entity;
+package com.toy.E_commerce.order.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,20 +8,13 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LocalLoginInfo {
+public class PaymentMethod {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String loginId;
-
-    @Column(nullable = false)
-    private String password;
-
-    @OneToOne(mappedBy = "member")
-    @JoinColumn(name = "member_id")
-    private Member member;
+    private String method;
 
 }
