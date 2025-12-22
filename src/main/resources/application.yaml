@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: trace
 
   servlet:
     multipart:
@@ -29,11 +27,22 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
 
-jwt:
-  issuer: "socialNetworkService"
-  key:
-    access-key: "GxNfK0XvN7pM3jB2YqRtZl4s8dF1vC9qTzE5aWm2sUuLxOeH"
-    refresh-key: "JrW4pD7aZsQ8xR1mTgB2yV5fNnL9kC3vEoH6qUuP0wYtSxMz"
-  ttl:
-    access: 30 #min
-    refresh: 7 # days
+security:
+  jwt:
+    issuer: "E-Commerce"
+    key:
+      access-key: "GxNfK0XvN7pM3jB2YqRtZl4s8dF1vC9qTzE5aWm2sUuLxOeH"
+      refresh-key: "JrW4pD7aZsQ8xR1mTgB2yV5fNnL9kC3vEoH6qUuP0wYtSxMz"
+    ttl:
+      access: 30 #min
+      refresh: 7 # days
+
+  cookie:
+    refresh-token:
+      name: refreshToken
+      path: /auth/reissue
+      http-only: true
+      secure: true
+      same-site: Strict
+      max-age-seconds: 1209600
+

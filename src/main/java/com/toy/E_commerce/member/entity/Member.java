@@ -3,10 +3,7 @@ package com.toy.E_commerce.member.entity;
 import com.toy.E_commerce.global.entity.base.id.LongIdSoftDeleteEntity;
 import com.toy.E_commerce.member.entity.enums.MemberRole;
 import com.toy.E_commerce.member.entity.enums.OauthType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.UUID;
@@ -22,19 +19,22 @@ public class Member extends LongIdSoftDeleteEntity {
     private String email;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private OauthType oauthType;
 
     @Column(nullable = false)
     private String oauthId;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private MemberRole role;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
     private UUID identityId;
 
     private String profileImgPath;
 
-    @OneToOne(mappedBy = "member")
+    @OneToOne(mappedBy = "member", fetch = FetchType.EAGER)
     private LocalLoginInfo loginInfo;
+
 }
