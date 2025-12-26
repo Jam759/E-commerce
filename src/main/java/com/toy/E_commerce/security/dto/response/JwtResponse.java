@@ -11,9 +11,10 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginResponse {
+public class JwtResponse {
 
     private String accessToken;
+    private String refreshToken;
     private LocalDateTime accessTokeExpiredAt;
     private LocalDateTime refreshTokeExpiredAt;
     

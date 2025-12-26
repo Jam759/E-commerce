@@ -1,6 +1,7 @@
 package com.toy.E_commerce.security.properties;
 
 
+import com.toy.E_commerce.global.util.PropertyUtils;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
@@ -25,19 +26,29 @@ public class JwtProperties {
 
     public JwtProperties(Environment env) {
         this.env = env;
-        this.ACCESS_TOKEN_SECRET_KEY = parseKey(env.getProperty("security.jwt.key.access-key"));
-        this.REFRESH_TOKEN_SECRET_KEY = parseKey(env.getProperty("security.jwt.key.refresh-key"));
-        long accessTtl =
-                parseLongAndNullCheck(env.getProperty("security.jwt.ttl.access"));
-        long refreshTtl =
-                parseLongAndNullCheck(env.getProperty("security.jwt.ttl.refresh"));
-        this.ACCESS_TOKEN_TTL = Duration.ofMinutes(accessTtl);
-        this.REFRESH_TOKEN_TTL = Duration.ofDays(refreshTtl);
-        this.TOKEN_ISSUER = env.getProperty("security.jwt.issuer");
-    }
 
-    private Long parseLongAndNullCheck(String value) {
-        return Long.parseLong(Objects.requireNonNull(value));
+        this.ACCESS_TOKEN_SECRET_KEY =
+                PropertyUtils.getRequired(env,
+                        "security.jwt.key.access-key",
+                        this::parseKey);
+
+        this.REFRESH_TOKEN_SECRET_KEY =
+                PropertyUtils.getRequired(env,
+                        "security.jwt.key.refresh-key",
+                        this::parseKey);
+
+        this.ACCESS_TOKEN_TTL =
+                Duration.ofMinutes(
+                        PropertyUtils.getLong(env, "security.jwt.ttl.access")
+                );
+
+        this.REFRESH_TOKEN_TTL =
+                Duration.ofDays(
+                        PropertyUtils.getLong(env, "security.jwt.ttl.refresh")
+                );
+
+        this.TOKEN_ISSUER =
+                PropertyUtils.getRequired(env, "security.jwt.issuer");
     }
 
     private Key parseKey(String value) {

@@ -11,24 +11,23 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SecurityCookieServiceImpl implements SecurityCookieService {
 
-    private final JwtProperties jwtProperties;
     private final SecurityCookieProperties cookieProperties;
 
     @Override
     public ResponseCookie create(String refreshToken) {
-        return ResponseCookie.from("refreshToken", refreshToken)
+        return ResponseCookie.from(cookieProperties.getREFRESH_TOKEN_COOKIE_NAME(), refreshToken)
                 .httpOnly(true)
-                .secure(false) //나중에 바꾸기
-                .sameSite("None")
-                .path("/auth/reissue")
-                .maxAge(properties.getRefreshTokenTtl())
+                .secure(cookieProperties.isREFRESH_TOKEN_SECURE())
+                .sameSite(cookieProperties.getREFRESH_TOKEN_SAME_SITE())
+                .path(cookieProperties.getREFRESH_TOKEN_COOKIE_PATH())
+                .maxAge(cookieProperties.getREFRESH_TOKEN_MAX_AGE())
                 .build();
     }
 
     @Override
     public ResponseCookie delete() {
-        return ResponseCookie.from("refreshToken", "")
-                .path("/auth/reissue")
+        return ResponseCookie.from(cookieProperties.getREFRESH_TOKEN_COOKIE_NAME(), "")
+                .path(cookieProperties.getREFRESH_TOKEN_COOKIE_PATH())
                 .maxAge(0)
                 .build();
     }
