@@ -3,12 +3,16 @@ package com.toy.E_commerce.product.entity;
 import com.toy.E_commerce.global.entity.base.id.LongIdSoftDeleteEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
+@Table(name = "product")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE product SET deleted_at = now() WHERE id = ?")
 public class Product extends LongIdSoftDeleteEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -21,7 +25,7 @@ public class Product extends LongIdSoftDeleteEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_small_id")
-    private CategorySmall store;
+    private CategorySmall categorySmall;
 
     @Column(nullable = false, length = 50)
     private String title;

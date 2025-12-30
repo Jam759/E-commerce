@@ -3,7 +3,7 @@ package com.toy.E_commerce.global.config;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.Expiry;
-import com.toy.E_commerce.security.dto.cache.AccessTokenBlackListCache;
+import com.toy.E_commerce.auth.dto.cache.AccessTokenBlackListCache;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

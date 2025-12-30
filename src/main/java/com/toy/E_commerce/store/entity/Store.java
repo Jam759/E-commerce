@@ -4,11 +4,13 @@ import com.toy.E_commerce.global.entity.lifecycle.BaseTimeEntity;
 import com.toy.E_commerce.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
+@Table(name = "store")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Store extends BaseTimeEntity {
 
@@ -16,7 +18,6 @@ public class Store extends BaseTimeEntity {
     private Long id;
 
     @MapsId
-    @JoinColumn(name = "member_id")
     @OneToOne(fetch = FetchType.LAZY)
     private Member member;
 

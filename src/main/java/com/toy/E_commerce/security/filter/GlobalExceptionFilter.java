@@ -1,7 +1,7 @@
 package com.toy.E_commerce.security.filter;
 
 import com.toy.E_commerce.global.exception.GlobalErrorCode;
-import com.toy.E_commerce.security.exception.AuthBaseException;
+import com.toy.E_commerce.auth.exception.AuthBaseException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -3,11 +3,13 @@ package com.toy.E_commerce.store.entity;
 import com.toy.E_commerce.global.entity.base.id.LongIdCreatedEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
+@Table(name = "category_store_product")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CategoryStoreProduct extends LongIdCreatedEntity {
 

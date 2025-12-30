@@ -5,13 +5,19 @@ import com.toy.E_commerce.product.entity.StoreSellProduct;
 import com.toy.E_commerce.product.entity.enums.Currency;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
+@Table(name = "product_order_item")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductOrderItem {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @JoinColumn(name = "product_order_id")
     @ManyToOne(fetch = FetchType.LAZY)

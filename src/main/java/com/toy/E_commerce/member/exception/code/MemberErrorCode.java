@@ -7,7 +7,8 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum MemberErrorCode implements GlobalErrorCode {
 
-    MEMBER_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, 1004, "존재하지 않는 유저입니다.");
+    MEMBER_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, 1004, "존재하지 않는 유저입니다."),
+    MEMBER_EMAIL_DUPLICATED_ERROR(HttpStatus.BAD_REQUEST,1000 , "이미 존재하는 이메일입니다." );
 
     private final HttpStatus httpStatus;
     private final int errorCode;

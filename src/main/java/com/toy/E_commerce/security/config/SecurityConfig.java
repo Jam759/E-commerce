@@ -1,11 +1,11 @@
 package com.toy.E_commerce.security.config;
 
+import com.toy.E_commerce.auth.service.query.AccessTokenBlackListQueryService;
 import com.toy.E_commerce.security.filter.GlobalExceptionFilter;
 import com.toy.E_commerce.security.filter.JwtAuthenticationFilter;
 import com.toy.E_commerce.security.handler.CustomAccessDeniedHandler;
 import com.toy.E_commerce.security.handler.CustomAuthenticationEntryPoint;
-import com.toy.E_commerce.security.service.AccessTokenBlackListQueryService;
-import com.toy.E_commerce.security.util.JwtUtil;
+import com.toy.E_commerce.auth.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -6,12 +6,16 @@ import com.toy.E_commerce.order.entity.enums.OrderStatus;
 import com.toy.E_commerce.product.entity.enums.Currency;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
+@Table(name = "product_order")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE product_order SET deleted_at = now() WHERE id = ?")
 public class ProductOrder extends LongIdSoftDeleteEntity {
 
     @JoinColumn(name = "orderer_id")

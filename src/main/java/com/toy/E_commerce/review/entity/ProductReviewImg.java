@@ -5,12 +5,16 @@ import com.toy.E_commerce.review.entity.enums.FileFormat;
 import com.toy.E_commerce.review.entity.enums.FileUsage;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
+@Table(name = "product_review_img")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE product_review_img SET deleted_at = now() WHERE id = ?")
 public class ProductReviewImg extends LongIdSoftDeleteEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

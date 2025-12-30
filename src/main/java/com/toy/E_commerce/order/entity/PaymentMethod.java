@@ -2,11 +2,13 @@ package com.toy.E_commerce.order.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
+@Table(name = "payment_method")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PaymentMethod {
 

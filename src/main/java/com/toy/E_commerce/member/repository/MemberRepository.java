@@ -20,4 +20,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             @Param("identityId") UUID identityId
     );
 
+    boolean existsByEmail(String email);
 }

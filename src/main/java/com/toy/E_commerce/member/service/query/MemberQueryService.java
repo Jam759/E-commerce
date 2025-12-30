@@ -8,4 +8,7 @@ public interface MemberQueryService {
 
     Member getByIdentityId(UUID identityId);
 
+    Member getByLoginIdAndPassword(String loginId, String password);
+
+    void isExistsByEmail(String email);
 }

@@ -6,12 +6,16 @@ import com.toy.E_commerce.product.entity.Product;
 import com.toy.E_commerce.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
+@Table(name = "product_review")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE product_review SET deleted_at = now() WHERE id = ?")
 public class ProductReview extends LongIdSoftDeleteEntity {
 
     @JoinColumn(name = "reviewer_id")

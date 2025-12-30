@@ -6,13 +6,15 @@ import com.toy.E_commerce.order.entity.enums.PaymentStatus;
 import com.toy.E_commerce.product.entity.enums.Currency;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
+@Table(name = "product_payment")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductPayment extends BaseTimeEntity {
 

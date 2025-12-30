@@ -5,17 +5,17 @@ import com.toy.E_commerce.global.entity.base.id.LongIdSoftDeleteEntity;
 import com.toy.E_commerce.store.entity.enums.StorePolicyType;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
+@Table(name = "store_product_policy")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE store_product_policy SET deleted_at = now() WHERE id = ?")
 public class StoreProductPolicy extends LongIdSoftDeleteEntity {
-
-    @Id
-    @GeneratedValue
-    private Long id;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)

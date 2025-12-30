@@ -5,14 +5,18 @@ import com.toy.E_commerce.member.entity.enums.MemberRole;
 import com.toy.E_commerce.member.entity.enums.OauthType;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
 
 import java.util.UUID;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
+@Table(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE member SET deleted_at = now() WHERE id = ?")
 public class Member extends LongIdSoftDeleteEntity {
 
     @Column(unique = true, nullable = false)
