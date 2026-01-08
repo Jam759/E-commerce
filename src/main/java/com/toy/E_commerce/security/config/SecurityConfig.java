@@ -1,11 +1,13 @@
 package com.toy.E_commerce.security.config;
 
 import com.toy.E_commerce.auth.service.query.AccessTokenBlackListQueryService;
+import com.toy.E_commerce.auth.util.JwtUtil;
+import com.toy.E_commerce.global.annotation.enums.SecurityRole;
+import com.toy.E_commerce.global.annotation.expression.ApiRoleUrlCollector;
 import com.toy.E_commerce.security.filter.GlobalExceptionFilter;
 import com.toy.E_commerce.security.filter.JwtAuthenticationFilter;
 import com.toy.E_commerce.security.handler.CustomAccessDeniedHandler;
 import com.toy.E_commerce.security.handler.CustomAuthenticationEntryPoint;
-import com.toy.E_commerce.auth.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +32,7 @@ public class SecurityConfig {
 
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final ApiRoleUrlCollector apiRoleUrlCollector;
 
     @Bean
     public GlobalExceptionFilter globalExceptionFilter() {
@@ -38,7 +41,9 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtUtil, userService, blackListService);
+        return new JwtAuthenticationFilter(
+                jwtUtil, userService, blackListService, apiRoleUrlCollector
+        );
     }
 
     @Bean
@@ -56,14 +61,30 @@ public class SecurityConfig {
                         .authenticationEntryPoint(customAuthenticationEntryPoint)
                         .accessDeniedHandler(customAccessDeniedHandler)
                 )
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/api/v1/auth/**",
-                                "/public/**",
-                                "/swagger-ui/**"
-                        ).permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated())
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers(
+                            "/error",
+                            "/swagger-ui.html",
+                            "/swagger-ui/**",
+                            "/v3/api-docs/**"
+                    ).permitAll();
+                    auth.requestMatchers(
+                            apiRoleUrlCollector.getUrls(SecurityRole.PUBLIC).toArray(String[]::new)
+                    ).permitAll();
+                    auth.requestMatchers(
+                            apiRoleUrlCollector.getUrls(SecurityRole.AUTHENTICATED).toArray(String[]::new)
+                    ).authenticated();
+                    auth.requestMatchers(
+                            apiRoleUrlCollector.getUrls(SecurityRole.USER).toArray(String[]::new)
+                    ).hasRole("USER");
+                    auth.requestMatchers(
+                            apiRoleUrlCollector.getUrls(SecurityRole.SELLER).toArray(String[]::new)
+                    ).hasRole("SELLER");
+                    auth.requestMatchers(
+                            apiRoleUrlCollector.getUrls(SecurityRole.ADMIN).toArray(String[]::new)
+                    ).hasRole("ADMIN");
+                    auth.anyRequest().authenticated();
+                })
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(globalExceptionFilter(), JwtAuthenticationFilter.class);
         return http.build();

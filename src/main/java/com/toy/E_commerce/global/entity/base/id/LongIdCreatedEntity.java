@@ -1,5 +1,6 @@
 package com.toy.E_commerce.global.entity.base.id;
 
+import com.toy.E_commerce.global.entity.lifecycle.BaseCreatedEntity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @MappedSuperclass
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LongIdCreatedEntity {
+public class LongIdCreatedEntity extends BaseCreatedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

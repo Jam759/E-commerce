@@ -24,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class LocalAuthFacadeImpl implements LocalAuthFacade {
@@ -34,6 +36,7 @@ public class LocalAuthFacadeImpl implements LocalAuthFacade {
     private final RefreshTokenCommandService refreshTokenCommandService;
     private final RefreshTokenQueryService refreshTokenQueryService;
     private final AccessTokenBlackListCommandService accessTokenBlackListCommandService;
+
     @Override
     @Transactional(readOnly = false)
     public JwtResponse login(LocalLoginRequest request) {
@@ -54,8 +57,10 @@ public class LocalAuthFacadeImpl implements LocalAuthFacade {
 
     @Override
     public JwtResponse reissue(String refreshToken) {
+        UUID jti = jwtUtil.getJtiFromRefreshToken(refreshToken);
         RefreshToken savedToken
-                = refreshTokenQueryService.getByRefreshToken(refreshToken);
+                = refreshTokenQueryService.getById(jti);
+
 
         if (savedToken.remainingTime() <= 3) {
             Member member = savedToken.getMember();

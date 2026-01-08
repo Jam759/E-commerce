@@ -1,5 +1,6 @@
 package com.toy.E_commerce.auth.entity;
 
+import com.toy.E_commerce.global.entity.lifecycle.BaseSoftDeleteEntity;
 import com.toy.E_commerce.global.entity.lifecycle.BaseTimeEntity;
 import com.toy.E_commerce.global.util.TimeUtil;
 import com.toy.E_commerce.member.entity.Member;
@@ -16,10 +17,9 @@ import java.util.UUID;
 @Getter
 @Builder
 @AllArgsConstructor
-@Where(clause = "deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE refresh_token SET deleted_at = now() WHERE id = ?")
-public class RefreshToken extends BaseTimeEntity {
+public class RefreshToken extends BaseSoftDeleteEntity {
 
     @Id
     private UUID id;// jti
