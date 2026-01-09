@@ -34,7 +34,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 
     @Override
     public void isExistsByEmail(String email) {
-        if (repository.existsByEmail(email)) {
+        if (repository.existsByEmailAndDeletedAtIsNull(email)) {
             throw new MemberException(MemberErrorCode.MEMBER_EMAIL_DUPLICATED_ERROR);
         }
     }

@@ -41,4 +41,14 @@ public class Member extends LongIdSoftDeleteEntity {
     @OneToOne(mappedBy = "member", fetch = FetchType.EAGER)
     private LocalLoginInfo loginInfo;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Member member = (Member) o;
+        return getId() != null
+                && getId().equals(member.getId())
+                && getIdentityId().equals(member.getIdentityId());
+    }
+
 }

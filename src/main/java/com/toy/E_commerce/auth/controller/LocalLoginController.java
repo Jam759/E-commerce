@@ -34,7 +34,6 @@ public class LocalLoginController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(body);
-
     }
 
     @PostMapping("/v1/reissue")
@@ -47,7 +46,10 @@ public class LocalLoginController {
     ) {
 
         JwtResponse body = facade.reissue(refreshToken);
-        return ResponseEntity.ok(body);
+        ResponseCookie cookie = cookieService.create(body.getRefreshToken());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(body);
 
     }
 

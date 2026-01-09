@@ -10,6 +10,8 @@ import com.toy.E_commerce.auth.dto.application.TokenInfo;
 import com.toy.E_commerce.auth.dto.application.enums.TokenType;
 import com.toy.E_commerce.auth.dto.cache.AccessTokenBlackListCache;
 import com.toy.E_commerce.auth.entity.RefreshToken;
+import com.toy.E_commerce.auth.exception.JwtUtilErrorCode;
+import com.toy.E_commerce.auth.exception.JwtUtilException;
 import com.toy.E_commerce.auth.facade.LocalAuthFacade;
 import com.toy.E_commerce.auth.service.command.AccessTokenBlackListCommandService;
 import com.toy.E_commerce.auth.service.command.RefreshTokenCommandService;
@@ -46,8 +48,11 @@ public class LocalAuthFacadeImpl implements LocalAuthFacade {
         Member member
                 = memberQueryService.getByLoginIdAndPassword(loginId, password);
 
-        TokenBundle jwtBundle = jwtUtil.createAllToken(member);
+        //잔여 refreshToken 있으면 삭제 없으면 무시
+        refreshTokenQueryService.findByMember(member)
+                .ifPresent(refreshTokenCommandService::delete);
 
+        TokenBundle jwtBundle = jwtUtil.createAllToken(member);
         RefreshToken savedRefreshToken
                 = AuthFactory.toRefreshToken(member, jwtBundle);
         refreshTokenCommandService.save(savedRefreshToken);
@@ -58,22 +63,25 @@ public class LocalAuthFacadeImpl implements LocalAuthFacade {
     @Override
     public JwtResponse reissue(String refreshToken) {
         UUID jti = jwtUtil.getJtiFromRefreshToken(refreshToken);
-        RefreshToken savedToken
-                = refreshTokenQueryService.getById(jti);
+        UUID userIdentity = jwtUtil.getSubjectFromRefreshToken(refreshToken);
 
+        Member requester = memberQueryService.getByIdentityId(userIdentity);
+        RefreshToken savedToken = refreshTokenQueryService.getById(jti);
 
-        if (savedToken.remainingTime() <= 3) {
-            Member member = savedToken.getMember();
-            TokenBundle jwtBundle = jwtUtil.createAllToken(member);
-            RefreshToken newRefreshToken
-                    = AuthFactory.toRefreshToken(member, jwtBundle);
-            refreshTokenCommandService.save(newRefreshToken);
-            return AuthAssembler.toJwtResponse(jwtBundle);
+        if (!savedToken.isOwner(requester) || savedToken.remainingTime() <= 0) {
+            throw new JwtUtilException(JwtUtilErrorCode.TOKEN_EXPIRED);
         }
 
-        TokenInfo accessToken = jwtUtil.createAccessToken(savedToken.getMember());
-        return AuthAssembler.toJwtResponse(accessToken, savedToken);
+        //기존 삭제
+        refreshTokenCommandService.delete(savedToken);
 
+        // 새로 발급
+        TokenBundle jwtBundle = jwtUtil.createAllToken(requester);
+        RefreshToken savedRefreshToken
+                = AuthFactory.toRefreshToken(requester, jwtBundle);
+        refreshTokenCommandService.save(savedRefreshToken);
+
+        return AuthAssembler.toJwtResponse(jwtBundle);
     }
 
     @Override
@@ -110,7 +118,10 @@ public class LocalAuthFacadeImpl implements LocalAuthFacade {
 
         TokenInfo refreshTokenInfo
                 = jwtUtil.getTokenInfo(refreshToken, TokenType.REFRESH);
-        refreshTokenCommandService.delete(refreshTokenInfo.getJti());
+        RefreshToken savedRefreshToken
+                = refreshTokenQueryService.getById(refreshTokenInfo.getJti());
+
+        refreshTokenCommandService.delete(savedRefreshToken);
         accessTokenBlackListCommandService.saveCache(blackListCache);
     }
 }

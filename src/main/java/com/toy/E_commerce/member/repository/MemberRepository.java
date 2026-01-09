@@ -14,11 +14,14 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
         SELECT m
         FROM Member m
         LEFT JOIN FETCH m.loginInfo
-        WHERE m.identityId = :identityId
+        WHERE
+            1=1 AND
+            m.identityId = :identityId AND
+            m.deletedAt IS NULL
     """)
     Optional<Member> findByIdentityIdWithLoginInfo(
             @Param("identityId") UUID identityId
     );
 
-    boolean existsByEmail(String email);
+    boolean existsByEmailAndDeletedAtIsNull(String email);
 }

@@ -40,4 +40,8 @@ public class RefreshToken extends BaseSoftDeleteEntity {
         ).toDays();
     }
 
+    public boolean isOwner(Member member){
+        return this.member.equals(member);
+    }
+
 }

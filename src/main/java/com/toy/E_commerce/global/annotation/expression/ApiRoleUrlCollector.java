@@ -42,25 +42,25 @@ public class ApiRoleUrlCollector {
             String pkg = method.getBeanType().getPackageName();
 
             // 직접 개발한 API만 수집
-            // ApiRole은 비즈니스 API만
-            if (!pkg.startsWith("com.toy.E_commerce")) {
-                return;
-            }
+            if (!pkg.startsWith("com.toy.E_commerce")) return;
 
-            //ApiRole 없으면 AUTHENTICATED로 처리
+            // ApiRole 없으면 AUTHENTICATED로 처리
             SecurityRole[] roles =
                     (apiRole == null)
                             ? new SecurityRole[]{SecurityRole.AUTHENTICATED}
                             : apiRole.roles();
 
-            //ApiRole 있을 때만 규칙 검증
+            // ApiRole 있을 때만 규칙 검증
             if (apiRole != null) {
                 validateRoles(apiRole, method);
             }
 
             for (SecurityRole role : roles) {
-                info.getPatternValues()
-                        .forEach(pattern -> roleUrlMap.get(role).add(pattern));
+                info.getPatternValues().forEach(pattern -> {
+                    //PathVariable {id} → AntMatcher * 변환
+                    String convertedPattern = pattern.replaceAll("\\{[^/]+}", "*");
+                    roleUrlMap.get(role).add(convertedPattern);
+                });
             }
         });
 

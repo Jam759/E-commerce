@@ -14,15 +14,12 @@ import java.util.UUID;
 public class RefreshTokenCommandService {
 
     private final RefreshTokenRepository repository;
-    private final JwtUtil jwtUtil;
 
     public void save(RefreshToken refreshToken) {
-
-
         repository.save(refreshToken);
     }
 
-    public void delete(UUID jti) {
-
+    public void delete(RefreshToken refreshToken) {
+        repository.delete(refreshToken);
     }
 }
