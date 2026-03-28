@@ -1,3 +1,21 @@
 spring:
   application:
-    name: ecommerce
+    name: E-Commerce
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/capstone_design?useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true  #prod -> os var
+    username: root  #prod -> os var
+    password: root  #prod -> os var
+
+  jpa:
+    hibernate:
+      ddl-auto: update  #prod -> update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        generate_statistics: false
+    show-sql: false
+    defer-datasource-initialization: true
+
